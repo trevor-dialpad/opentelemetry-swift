@@ -209,7 +209,7 @@ public struct Opentelemetry_Proto_Metrics_V1_InstrumentationLibraryMetrics {
 /// - Metric is composed of a metadata and data.
 /// - Metadata part contains a name, description, unit.
 /// - Data is one of the possible types (Gauge, Sum, Histogram, etc.).
-/// - DataPoint contains timestamps, labels, and one of the possible value type
+/// - DataPoint contains timestamps, attributes, and one of the possible value type
 ///   fields.
 ///
 ///     Metric
@@ -250,7 +250,7 @@ public struct Opentelemetry_Proto_Metrics_V1_InstrumentationLibraryMetrics {
 ///                        +---------------------------+
 ///
 /// All DataPoint types have three common fields:
-/// - Labels zero or more key-value pairs associated with the data point.
+/// - Attributes zero or more key-value pairs associated with the data point.
 /// - StartTimeUnixNano MUST be set to the start of the interval when the data's
 ///   type includes an AggregationTemporality. This field is not set otherwise.
 /// - TimeUnixNano MUST be set to:
@@ -563,8 +563,8 @@ public struct Opentelemetry_Proto_Metrics_V1_IntDataPoint {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  /// The set of labels that uniquely identify this timeseries.
-  public var labels: [Opentelemetry_Proto_Common_V1_StringKeyValue] = []
+  /// The set of attributes that uniquely identify this timeseries.
+  public var attributes: [Opentelemetry_Proto_Common_V1_KeyValue] = []
 
   /// start_time_unix_nano is the last time when the aggregation value was reset
   /// to "zero". For some metric types this is ignored, see data types for more
@@ -605,8 +605,8 @@ public struct Opentelemetry_Proto_Metrics_V1_DoubleDataPoint {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  /// The set of labels that uniquely identify this timeseries.
-  public var labels: [Opentelemetry_Proto_Common_V1_StringKeyValue] = []
+  /// The set of attributes that uniquely identify this timeseries.
+  public var attributes: [Opentelemetry_Proto_Common_V1_KeyValue] = []
 
   /// start_time_unix_nano is the last time when the aggregation value was reset
   /// to "zero". For some metric types this is ignored, see data types for more
@@ -649,8 +649,8 @@ public struct Opentelemetry_Proto_Metrics_V1_IntHistogramDataPoint {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  /// The set of labels that uniquely identify this timeseries.
-  public var labels: [Opentelemetry_Proto_Common_V1_StringKeyValue] = []
+  /// The set of attributes that uniquely identify this timeseries.
+  public var attributes: [Opentelemetry_Proto_Common_V1_KeyValue] = []
 
   /// start_time_unix_nano is the last time when the aggregation value was reset
   /// to "zero". For some metric types this is ignored, see data types for more
@@ -725,8 +725,8 @@ public struct Opentelemetry_Proto_Metrics_V1_DoubleHistogramDataPoint {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  /// The set of labels that uniquely identify this timeseries.
-  public var labels: [Opentelemetry_Proto_Common_V1_StringKeyValue] = []
+  /// The set of attributes that uniquely identify this timeseries.
+  public var attributes: [Opentelemetry_Proto_Common_V1_KeyValue] = []
 
   /// start_time_unix_nano is the last time when the aggregation value was reset
   /// to "zero". For some metric types this is ignored, see data types for more
@@ -799,8 +799,8 @@ public struct Opentelemetry_Proto_Metrics_V1_DoubleSummaryDataPoint {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  /// The set of labels that uniquely identify this timeseries.
-  public var labels: [Opentelemetry_Proto_Common_V1_StringKeyValue] = []
+  /// The set of attributes that uniquely identify this timeseries.
+  public var attributes: [Opentelemetry_Proto_Common_V1_KeyValue] = []
 
   /// start_time_unix_nano is the last time when the aggregation value was reset
   /// to "zero". For some metric types this is ignored, see data types for more
@@ -872,10 +872,10 @@ public struct Opentelemetry_Proto_Metrics_V1_IntExemplar {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  /// The set of labels that were filtered out by the aggregator, but recorded
-  /// alongside the original measurement. Only labels that were filtered out
+  /// The set of attributes that were filtered out by the aggregator, but recorded
+  /// alongside the original measurement. Only attributes that were filtered out
   /// by the aggregator should be included
-  public var filteredLabels: [Opentelemetry_Proto_Common_V1_StringKeyValue] = []
+  public var filteredAttributes: [Opentelemetry_Proto_Common_V1_KeyValue] = []
 
   /// time_unix_nano is the exact time when this exemplar was recorded
   ///
@@ -910,10 +910,10 @@ public struct Opentelemetry_Proto_Metrics_V1_DoubleExemplar {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  /// The set of labels that were filtered out by the aggregator, but recorded
-  /// alongside the original measurement. Only labels that were filtered out
+  /// The set of attributes that were filtered out by the aggregator, but recorded
+  /// alongside the original measurement. Only attributes that were filtered out
   /// by the aggregator should be included
-  public var filteredLabels: [Opentelemetry_Proto_Common_V1_StringKeyValue] = []
+  public var filteredAttributes: [Opentelemetry_Proto_Common_V1_KeyValue] = []
 
   /// time_unix_nano is the exact time when this exemplar was recorded
   ///
@@ -1037,8 +1037,8 @@ extension Opentelemetry_Proto_Metrics_V1_Metric: SwiftProtobuf.Message, SwiftPro
     5: .standard(proto: "double_gauge"),
     6: .standard(proto: "int_sum"),
     7: .standard(proto: "double_sum"),
-    8: .standard(proto: "int_histogram"),
-    9: .standard(proto: "double_histogram"),
+    8: .standard(proto: "histogram"),
+    9: .standard(proto: "histogram"),
     11: .standard(proto: "double_summary"),
   ]
 
@@ -1439,7 +1439,7 @@ extension Opentelemetry_Proto_Metrics_V1_DoubleSummary: SwiftProtobuf.Message, S
 extension Opentelemetry_Proto_Metrics_V1_IntDataPoint: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".IntDataPoint"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "labels"),
+    1: .same(proto: "attributes"),
     2: .standard(proto: "start_time_unix_nano"),
     3: .standard(proto: "time_unix_nano"),
     4: .same(proto: "value"),
@@ -1452,7 +1452,7 @@ extension Opentelemetry_Proto_Metrics_V1_IntDataPoint: SwiftProtobuf.Message, Sw
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.labels) }()
+      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.attributes) }()
       case 2: try { try decoder.decodeSingularFixed64Field(value: &self.startTimeUnixNano) }()
       case 3: try { try decoder.decodeSingularFixed64Field(value: &self.timeUnixNano) }()
       case 4: try { try decoder.decodeSingularSFixed64Field(value: &self.value) }()
@@ -1463,8 +1463,8 @@ extension Opentelemetry_Proto_Metrics_V1_IntDataPoint: SwiftProtobuf.Message, Sw
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.labels.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.labels, fieldNumber: 1)
+    if !self.attributes.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.attributes, fieldNumber: 1)
     }
     if self.startTimeUnixNano != 0 {
       try visitor.visitSingularFixed64Field(value: self.startTimeUnixNano, fieldNumber: 2)
@@ -1482,7 +1482,7 @@ extension Opentelemetry_Proto_Metrics_V1_IntDataPoint: SwiftProtobuf.Message, Sw
   }
 
   public static func ==(lhs: Opentelemetry_Proto_Metrics_V1_IntDataPoint, rhs: Opentelemetry_Proto_Metrics_V1_IntDataPoint) -> Bool {
-    if lhs.labels != rhs.labels {return false}
+    if lhs.attributes != rhs.attributes {return false}
     if lhs.startTimeUnixNano != rhs.startTimeUnixNano {return false}
     if lhs.timeUnixNano != rhs.timeUnixNano {return false}
     if lhs.value != rhs.value {return false}
@@ -1495,7 +1495,7 @@ extension Opentelemetry_Proto_Metrics_V1_IntDataPoint: SwiftProtobuf.Message, Sw
 extension Opentelemetry_Proto_Metrics_V1_DoubleDataPoint: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".DoubleDataPoint"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "labels"),
+    1: .same(proto: "attributes"),
     2: .standard(proto: "start_time_unix_nano"),
     3: .standard(proto: "time_unix_nano"),
     4: .same(proto: "value"),
@@ -1508,7 +1508,7 @@ extension Opentelemetry_Proto_Metrics_V1_DoubleDataPoint: SwiftProtobuf.Message,
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.labels) }()
+      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.attributes) }()
       case 2: try { try decoder.decodeSingularFixed64Field(value: &self.startTimeUnixNano) }()
       case 3: try { try decoder.decodeSingularFixed64Field(value: &self.timeUnixNano) }()
       case 4: try { try decoder.decodeSingularDoubleField(value: &self.value) }()
@@ -1519,8 +1519,8 @@ extension Opentelemetry_Proto_Metrics_V1_DoubleDataPoint: SwiftProtobuf.Message,
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.labels.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.labels, fieldNumber: 1)
+    if !self.attributes.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.attributes, fieldNumber: 1)
     }
     if self.startTimeUnixNano != 0 {
       try visitor.visitSingularFixed64Field(value: self.startTimeUnixNano, fieldNumber: 2)
@@ -1538,7 +1538,7 @@ extension Opentelemetry_Proto_Metrics_V1_DoubleDataPoint: SwiftProtobuf.Message,
   }
 
   public static func ==(lhs: Opentelemetry_Proto_Metrics_V1_DoubleDataPoint, rhs: Opentelemetry_Proto_Metrics_V1_DoubleDataPoint) -> Bool {
-    if lhs.labels != rhs.labels {return false}
+    if lhs.attributes != rhs.attributes {return false}
     if lhs.startTimeUnixNano != rhs.startTimeUnixNano {return false}
     if lhs.timeUnixNano != rhs.timeUnixNano {return false}
     if lhs.value != rhs.value {return false}
@@ -1551,7 +1551,7 @@ extension Opentelemetry_Proto_Metrics_V1_DoubleDataPoint: SwiftProtobuf.Message,
 extension Opentelemetry_Proto_Metrics_V1_IntHistogramDataPoint: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".IntHistogramDataPoint"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "labels"),
+    1: .same(proto: "attributes"),
     2: .standard(proto: "start_time_unix_nano"),
     3: .standard(proto: "time_unix_nano"),
     4: .same(proto: "count"),
@@ -1567,7 +1567,7 @@ extension Opentelemetry_Proto_Metrics_V1_IntHistogramDataPoint: SwiftProtobuf.Me
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.labels) }()
+      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.attributes) }()
       case 2: try { try decoder.decodeSingularFixed64Field(value: &self.startTimeUnixNano) }()
       case 3: try { try decoder.decodeSingularFixed64Field(value: &self.timeUnixNano) }()
       case 4: try { try decoder.decodeSingularFixed64Field(value: &self.count) }()
@@ -1581,8 +1581,8 @@ extension Opentelemetry_Proto_Metrics_V1_IntHistogramDataPoint: SwiftProtobuf.Me
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.labels.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.labels, fieldNumber: 1)
+    if !self.attributes.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.attributes, fieldNumber: 1)
     }
     if self.startTimeUnixNano != 0 {
       try visitor.visitSingularFixed64Field(value: self.startTimeUnixNano, fieldNumber: 2)
@@ -1609,7 +1609,7 @@ extension Opentelemetry_Proto_Metrics_V1_IntHistogramDataPoint: SwiftProtobuf.Me
   }
 
   public static func ==(lhs: Opentelemetry_Proto_Metrics_V1_IntHistogramDataPoint, rhs: Opentelemetry_Proto_Metrics_V1_IntHistogramDataPoint) -> Bool {
-    if lhs.labels != rhs.labels {return false}
+    if lhs.attributes != rhs.attributes {return false}
     if lhs.startTimeUnixNano != rhs.startTimeUnixNano {return false}
     if lhs.timeUnixNano != rhs.timeUnixNano {return false}
     if lhs.count != rhs.count {return false}
@@ -1625,7 +1625,7 @@ extension Opentelemetry_Proto_Metrics_V1_IntHistogramDataPoint: SwiftProtobuf.Me
 extension Opentelemetry_Proto_Metrics_V1_DoubleHistogramDataPoint: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".DoubleHistogramDataPoint"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "labels"),
+    1: .same(proto: "attributes"),
     2: .standard(proto: "start_time_unix_nano"),
     3: .standard(proto: "time_unix_nano"),
     4: .same(proto: "count"),
@@ -1641,7 +1641,7 @@ extension Opentelemetry_Proto_Metrics_V1_DoubleHistogramDataPoint: SwiftProtobuf
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.labels) }()
+      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.attributes) }()
       case 2: try { try decoder.decodeSingularFixed64Field(value: &self.startTimeUnixNano) }()
       case 3: try { try decoder.decodeSingularFixed64Field(value: &self.timeUnixNano) }()
       case 4: try { try decoder.decodeSingularFixed64Field(value: &self.count) }()
@@ -1655,8 +1655,8 @@ extension Opentelemetry_Proto_Metrics_V1_DoubleHistogramDataPoint: SwiftProtobuf
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.labels.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.labels, fieldNumber: 1)
+    if !self.attributes.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.attributes, fieldNumber: 1)
     }
     if self.startTimeUnixNano != 0 {
       try visitor.visitSingularFixed64Field(value: self.startTimeUnixNano, fieldNumber: 2)
@@ -1683,7 +1683,7 @@ extension Opentelemetry_Proto_Metrics_V1_DoubleHistogramDataPoint: SwiftProtobuf
   }
 
   public static func ==(lhs: Opentelemetry_Proto_Metrics_V1_DoubleHistogramDataPoint, rhs: Opentelemetry_Proto_Metrics_V1_DoubleHistogramDataPoint) -> Bool {
-    if lhs.labels != rhs.labels {return false}
+    if lhs.attributes != rhs.attributes {return false}
     if lhs.startTimeUnixNano != rhs.startTimeUnixNano {return false}
     if lhs.timeUnixNano != rhs.timeUnixNano {return false}
     if lhs.count != rhs.count {return false}
@@ -1699,7 +1699,7 @@ extension Opentelemetry_Proto_Metrics_V1_DoubleHistogramDataPoint: SwiftProtobuf
 extension Opentelemetry_Proto_Metrics_V1_DoubleSummaryDataPoint: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".DoubleSummaryDataPoint"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "labels"),
+    1: .same(proto: "attributes"),
     2: .standard(proto: "start_time_unix_nano"),
     3: .standard(proto: "time_unix_nano"),
     4: .same(proto: "count"),
@@ -1713,7 +1713,7 @@ extension Opentelemetry_Proto_Metrics_V1_DoubleSummaryDataPoint: SwiftProtobuf.M
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.labels) }()
+      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.attributes) }()
       case 2: try { try decoder.decodeSingularFixed64Field(value: &self.startTimeUnixNano) }()
       case 3: try { try decoder.decodeSingularFixed64Field(value: &self.timeUnixNano) }()
       case 4: try { try decoder.decodeSingularFixed64Field(value: &self.count) }()
@@ -1725,8 +1725,8 @@ extension Opentelemetry_Proto_Metrics_V1_DoubleSummaryDataPoint: SwiftProtobuf.M
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.labels.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.labels, fieldNumber: 1)
+    if !self.attributes.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.attributes, fieldNumber: 1)
     }
     if self.startTimeUnixNano != 0 {
       try visitor.visitSingularFixed64Field(value: self.startTimeUnixNano, fieldNumber: 2)
@@ -1747,7 +1747,7 @@ extension Opentelemetry_Proto_Metrics_V1_DoubleSummaryDataPoint: SwiftProtobuf.M
   }
 
   public static func ==(lhs: Opentelemetry_Proto_Metrics_V1_DoubleSummaryDataPoint, rhs: Opentelemetry_Proto_Metrics_V1_DoubleSummaryDataPoint) -> Bool {
-    if lhs.labels != rhs.labels {return false}
+    if lhs.attributes != rhs.attributes {return false}
     if lhs.startTimeUnixNano != rhs.startTimeUnixNano {return false}
     if lhs.timeUnixNano != rhs.timeUnixNano {return false}
     if lhs.count != rhs.count {return false}
@@ -1799,7 +1799,7 @@ extension Opentelemetry_Proto_Metrics_V1_DoubleSummaryDataPoint.ValueAtQuantile:
 extension Opentelemetry_Proto_Metrics_V1_IntExemplar: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".IntExemplar"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "filtered_labels"),
+    1: .standard(proto: "filtered_attributes"),
     2: .standard(proto: "time_unix_nano"),
     3: .same(proto: "value"),
     4: .standard(proto: "span_id"),
@@ -1812,7 +1812,7 @@ extension Opentelemetry_Proto_Metrics_V1_IntExemplar: SwiftProtobuf.Message, Swi
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.filteredLabels) }()
+      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.filteredAttributes) }()
       case 2: try { try decoder.decodeSingularFixed64Field(value: &self.timeUnixNano) }()
       case 3: try { try decoder.decodeSingularSFixed64Field(value: &self.value) }()
       case 4: try { try decoder.decodeSingularBytesField(value: &self.spanID) }()
@@ -1823,8 +1823,8 @@ extension Opentelemetry_Proto_Metrics_V1_IntExemplar: SwiftProtobuf.Message, Swi
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.filteredLabels.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.filteredLabels, fieldNumber: 1)
+    if !self.filteredAttributes.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.filteredAttributes, fieldNumber: 1)
     }
     if self.timeUnixNano != 0 {
       try visitor.visitSingularFixed64Field(value: self.timeUnixNano, fieldNumber: 2)
@@ -1842,7 +1842,7 @@ extension Opentelemetry_Proto_Metrics_V1_IntExemplar: SwiftProtobuf.Message, Swi
   }
 
   public static func ==(lhs: Opentelemetry_Proto_Metrics_V1_IntExemplar, rhs: Opentelemetry_Proto_Metrics_V1_IntExemplar) -> Bool {
-    if lhs.filteredLabels != rhs.filteredLabels {return false}
+    if lhs.filteredAttributes != rhs.filteredAttributes {return false}
     if lhs.timeUnixNano != rhs.timeUnixNano {return false}
     if lhs.value != rhs.value {return false}
     if lhs.spanID != rhs.spanID {return false}
@@ -1855,7 +1855,7 @@ extension Opentelemetry_Proto_Metrics_V1_IntExemplar: SwiftProtobuf.Message, Swi
 extension Opentelemetry_Proto_Metrics_V1_DoubleExemplar: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".DoubleExemplar"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "filtered_labels"),
+    1: .standard(proto: "filtered_attributes"),
     2: .standard(proto: "time_unix_nano"),
     3: .same(proto: "value"),
     4: .standard(proto: "span_id"),
@@ -1868,7 +1868,7 @@ extension Opentelemetry_Proto_Metrics_V1_DoubleExemplar: SwiftProtobuf.Message, 
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.filteredLabels) }()
+      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.filteredAttributes) }()
       case 2: try { try decoder.decodeSingularFixed64Field(value: &self.timeUnixNano) }()
       case 3: try { try decoder.decodeSingularDoubleField(value: &self.value) }()
       case 4: try { try decoder.decodeSingularBytesField(value: &self.spanID) }()
@@ -1879,8 +1879,8 @@ extension Opentelemetry_Proto_Metrics_V1_DoubleExemplar: SwiftProtobuf.Message, 
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.filteredLabels.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.filteredLabels, fieldNumber: 1)
+    if !self.filteredAttributes.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.filteredAttributes, fieldNumber: 1)
     }
     if self.timeUnixNano != 0 {
       try visitor.visitSingularFixed64Field(value: self.timeUnixNano, fieldNumber: 2)
@@ -1898,7 +1898,7 @@ extension Opentelemetry_Proto_Metrics_V1_DoubleExemplar: SwiftProtobuf.Message, 
   }
 
   public static func ==(lhs: Opentelemetry_Proto_Metrics_V1_DoubleExemplar, rhs: Opentelemetry_Proto_Metrics_V1_DoubleExemplar) -> Bool {
-    if lhs.filteredLabels != rhs.filteredLabels {return false}
+    if lhs.filteredAttributes != rhs.filteredAttributes {return false}
     if lhs.timeUnixNano != rhs.timeUnixNano {return false}
     if lhs.value != rhs.value {return false}
     if lhs.spanID != rhs.spanID {return false}
